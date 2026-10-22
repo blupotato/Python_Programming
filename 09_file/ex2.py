@@ -70,7 +70,7 @@ with open(FILE_PATH, "w", encoding="utf-8") as f:
 # 역직렬화) JSON 형식 파일 -> 파이썬 객체
 try:
     with open(FILE_PATH, "r", encoding="utf-8") as f:
-        score = json.( )(f)
+        score = json.load(f)
 except FileNotFoundError:
     print("파일을 찾을 수 없습니다.")
 
