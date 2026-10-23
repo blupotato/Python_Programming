@@ -11,11 +11,11 @@
 #  - cursor()  : SQL을 실행하는 ( Cursor ) 객체 생성
 #  - execute() : SQL을 ( 실행 )
 #  - commit()  : INSERT/UPDATE/DELETE 후 변경사항을 확정
-#  - close()   : 사용이 끝나면 연결 (  )
+#  - close()   : 사용이 끝나면 연결 ( 종료 )
 #
 #  [기본 SQL문]
 #  - ( CREATE TABLE ) : 테이블 생성
-#  - ( INSERT ) : 데이터 삽입
+#  - ( INSERT TABLE) : 데이터 삽입
 #  - ( SELECT ) : 데이터 조회
 #  - ( UPDATE ) : 데이터 변경
 #  - ( DELETE ) : 데이터 삭제
