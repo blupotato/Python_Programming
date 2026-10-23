@@ -11,11 +11,11 @@
 #  - cursor()  : SQL을 실행하는 ( Cursor ) 객체 생성
 #  - execute() : SQL을 ( 실행 )
 #  - commit()  : INSERT/UPDATE/DELETE 후 변경사항을 확정
-#  - close()   : 사용이 끝나면 연결 ( 종료 )
+#  - close()   : 사용이 끝나면 연결 (  )
 #
 #  [기본 SQL문]
 #  - ( CREATE TABLE ) : 테이블 생성
-#  - ( INSERT TABLE ) : 데이터 삽입
+#  - ( INSERT ) : 데이터 삽입
 #  - ( SELECT ) : 데이터 조회
 #  - ( UPDATE ) : 데이터 변경
 #  - ( DELETE ) : 데이터 삭제
@@ -37,9 +37,9 @@ DB_PATH = os.path.join(BASE_DIR, "school.db")
 class Student:
     # 생성자: Student 객체 초기화
     def __init__(self, db_path):
-        self.conn = sqlite3.connect(db_path)    # DB 연결        
+        self.conn = sqlite3.connect(db_path)    # DB 연결
         self.cur = self.conn.cursor()           # Cursor: SQL을 실행하는 객체
-        self.create_table
+        self.create_table()                     # 테이블이 없으면 생성
 
     # 테이블 생성
     def create_table(self):
@@ -51,11 +51,12 @@ class Student:
                 score INTEGER
             )
         """)
+        self.conn.commit()
 
     # 데이터 삽입 (? 사용)
     # ===========================================================
     #  (중요) ? (Placeholder)
-    #  - SQL 문에서 값이 들어갈 자리에 ( ? )를 쓰고, 실제 값은 ( 튜플 )로 전달한다.
+    #  - SQL 문에서 값이 들어갈 자리에 ( )를 쓰고, 실제 값은 ( )로 전달한다.
     #  - ?와 튜플의 값은 순서대로 짝지어진다.
     #  - SQL Injection 방지
     # ===========================================================
@@ -67,6 +68,9 @@ class Student:
         self.conn.commit()              # 변경사항 확정 (INSERT/UPDATE/DELETE 후 필수)
         print("INSERT 완료")
 
+        # (나쁜 예) f-string으로 값을 직접 넣으면 SQL Injection 위험이 있음
+        # f"INSERT INTO student (name) VALUES ('{name}')"
+
     # 전체 조회
     def show_all(self):
         self.cur.execute("SELECT * FROM student")
@@ -75,12 +79,14 @@ class Student:
 
     # 점수가 min_score 이상인 데이터 조회
     def select_by_score(self, min_score):
-        self.cur.execute("SELECT * FROM student WHERE score >= ?", (min_score,))
+        self.cur.execute(
+            "SELECT * FROM student WHERE score >= ?", (min_score,))
         return self.cur.fetchall()
 
     # 이름으로 점수 변경
     def update_score(self, name, score):
-        self.cur.execute("UPDATE student SET score = ? WHERE name = ?", (score, name))
+        self.cur.execute(
+            "UPDATE student SET score = ? WHERE name = ?", (score, name))
         self.conn.commit()
         print("UPDATE 완료")
 
